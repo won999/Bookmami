@@ -17,11 +17,13 @@ export async function NavBar() {
           <Button
             variant="ghost"
             size="sm"
+            nativeButton={false}
             render={<Link href="/logs/new">기록하기</Link>}
           />
           <Button
             variant="ghost"
             size="sm"
+            nativeButton={false}
             render={<Link href="/family">가족 관리</Link>}
           />
           <form action={logoutAction}>

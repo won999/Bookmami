@@ -22,7 +22,11 @@ export default async function HomePage({
         <Suspense>
           <FeedFilters members={members} />
         </Suspense>
-        <Button size="sm" render={<Link href="/logs/new">+ 기록하기</Link>} />
+        <Button
+          size="sm"
+          nativeButton={false}
+          render={<Link href="/logs/new">+ 기록하기</Link>}
+        />
       </div>
 
       {logs.length === 0 ? (

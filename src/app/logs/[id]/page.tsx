@@ -85,11 +85,15 @@ export default async function LogDetailPage({
       )}
 
       <div className="mt-8 flex flex-wrap gap-2">
-        <Button render={<Link href={`/logs/${log.id}/card`}>인스타용 카드 만들기</Link>} />
+        <Button
+          nativeButton={false}
+          render={<Link href={`/logs/${log.id}/card`}>인스타용 카드 만들기</Link>}
+        />
         {isOwner && (
           <>
             <Button
               variant="outline"
+              nativeButton={false}
               render={<Link href={`/logs/${log.id}/edit`}>수정</Link>}
             />
             <DeleteLogButton logId={log.id} />
