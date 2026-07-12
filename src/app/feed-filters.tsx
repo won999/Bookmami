@@ -1,13 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 import { STATUS_LABEL, type FamilyMember, type ReadingStatus } from "@/lib/types";
 
 export function FeedFilters({ members }: { members: FamilyMember[] }) {
@@ -16,53 +10,74 @@ export function FeedFilters({ members }: { members: FamilyMember[] }) {
   const memberId = searchParams.get("member") ?? "all";
   const status = searchParams.get("status") ?? "all";
 
-  function updateParam(key: string, value: string | null) {
+  function updateParam(key: string, value: string) {
     const params = new URLSearchParams(searchParams.toString());
-    if (!value || value === "all") params.delete(key);
+    if (value === "all") params.delete(key);
     else params.set(key, value);
     router.push(`/?${params.toString()}`);
   }
 
   return (
-    <div className="flex gap-2">
-      <Select value={memberId} onValueChange={(v) => updateParam("member", v)}>
-        <SelectTrigger className="w-[130px]">
-          <SelectValue placeholder="가족">
-            {(value: string | null) => {
-              const selected = members.find((m) => m.id === value);
-              return selected ? `${selected.avatar_emoji} ${selected.name}` : "전체 가족";
-            }}
-          </SelectValue>
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="all">전체 가족</SelectItem>
-          {members.map((m) => (
-            <SelectItem key={m.id} value={m.id}>
-              {m.avatar_emoji} {m.name}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-
-      <Select value={status} onValueChange={(v) => updateParam("status", v)}>
-        <SelectTrigger className="w-[130px]">
-          <SelectValue placeholder="상태">
-            {(value: string | null) =>
-              value && value in STATUS_LABEL
-                ? STATUS_LABEL[value as ReadingStatus]
-                : "전체 상태"
-            }
-          </SelectValue>
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="all">전체 상태</SelectItem>
-          {(Object.keys(STATUS_LABEL) as ReadingStatus[]).map((s) => (
-            <SelectItem key={s} value={s}>
-              {STATUS_LABEL[s]}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+    <div className="flex flex-col gap-2">
+      <div className="flex flex-wrap gap-1.5">
+        <FilterChip
+          active={memberId === "all"}
+          onClick={() => updateParam("member", "all")}
+        >
+          전체 가족
+        </FilterChip>
+        {members.map((m) => (
+          <FilterChip
+            key={m.id}
+            active={memberId === m.id}
+            onClick={() => updateParam("member", m.id)}
+          >
+            {m.avatar_emoji} {m.name}
+          </FilterChip>
+        ))}
+      </div>
+      <div className="flex flex-wrap gap-1.5">
+        <FilterChip
+          active={status === "all"}
+          onClick={() => updateParam("status", "all")}
+        >
+          전체 상태
+        </FilterChip>
+        {(Object.keys(STATUS_LABEL) as ReadingStatus[]).map((s) => (
+          <FilterChip
+            key={s}
+            active={status === s}
+            onClick={() => updateParam("status", s)}
+          >
+            {STATUS_LABEL[s]}
+          </FilterChip>
+        ))}
+      </div>
     </div>
+  );
+}
+
+function FilterChip({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        "rounded-full border px-2.5 py-1 text-xs transition-colors",
+        active
+          ? "border-primary bg-primary/10 font-medium text-primary"
+          : "border-input text-muted-foreground hover:bg-accent"
+      )}
+    >
+      {children}
+    </button>
   );
 }

@@ -5,13 +5,7 @@ import { loginAction } from "@/app/actions/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 import type { FamilyMember } from "@/lib/types";
 
 export function LoginForm({
@@ -30,24 +24,25 @@ export function LoginForm({
       <input type="hidden" name="memberId" value={memberId} />
 
       <div className="flex flex-col gap-2">
-        <Label htmlFor="member">누구인가요?</Label>
-        <Select value={memberId} onValueChange={(v) => setMemberId(v ?? "")}>
-          <SelectTrigger id="member" className="w-full">
-            <SelectValue placeholder="가족 선택">
-              {(value: string | null) => {
-                const selected = members.find((m) => m.id === value);
-                return selected ? `${selected.avatar_emoji} ${selected.name}` : "가족 선택";
-              }}
-            </SelectValue>
-          </SelectTrigger>
-          <SelectContent>
-            {members.map((m) => (
-              <SelectItem key={m.id} value={m.id}>
-                {m.avatar_emoji} {m.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <Label>누구인가요?</Label>
+        <div className="flex flex-wrap gap-2">
+          {members.map((m) => (
+            <button
+              key={m.id}
+              type="button"
+              onClick={() => setMemberId(m.id)}
+              className={cn(
+                "flex items-center gap-1.5 rounded-lg border px-3 py-2 text-sm transition-colors",
+                memberId === m.id
+                  ? "border-primary bg-primary/10 font-medium text-primary"
+                  : "border-input hover:bg-accent"
+              )}
+            >
+              <span className="text-base">{m.avatar_emoji}</span>
+              {m.name}
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className="flex flex-col gap-2">

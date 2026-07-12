@@ -6,13 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import {
   FORMAT_LABEL,
@@ -93,18 +86,23 @@ export function LogForm({
 
       <div className="flex flex-col gap-2">
         <Label>장르</Label>
-        <Select value={genre} onValueChange={(v) => setGenre(v ?? "")}>
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="장르 선택" />
-          </SelectTrigger>
-          <SelectContent>
-            {GENRES.map((g) => (
-              <SelectItem key={g} value={g}>
-                {g}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <div className="flex flex-wrap gap-2">
+          {GENRES.map((g) => (
+            <button
+              key={g}
+              type="button"
+              onClick={() => setGenre(genre === g ? "" : g)}
+              className={cn(
+                "rounded-full border px-3 py-1.5 text-sm transition-colors",
+                genre === g
+                  ? "border-primary bg-primary/10 font-medium text-primary"
+                  : "border-input hover:bg-accent"
+              )}
+            >
+              {g}
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className="flex flex-col gap-2">
