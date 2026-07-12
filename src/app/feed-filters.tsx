@@ -27,7 +27,12 @@ export function FeedFilters({ members }: { members: FamilyMember[] }) {
     <div className="flex gap-2">
       <Select value={memberId} onValueChange={(v) => updateParam("member", v)}>
         <SelectTrigger className="w-[130px]">
-          <SelectValue placeholder="가족" />
+          <SelectValue placeholder="가족">
+            {(value: string | null) => {
+              const selected = members.find((m) => m.id === value);
+              return selected ? `${selected.avatar_emoji} ${selected.name}` : "전체 가족";
+            }}
+          </SelectValue>
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="all">전체 가족</SelectItem>
@@ -41,7 +46,13 @@ export function FeedFilters({ members }: { members: FamilyMember[] }) {
 
       <Select value={status} onValueChange={(v) => updateParam("status", v)}>
         <SelectTrigger className="w-[130px]">
-          <SelectValue placeholder="상태" />
+          <SelectValue placeholder="상태">
+            {(value: string | null) =>
+              value && value in STATUS_LABEL
+                ? STATUS_LABEL[value as ReadingStatus]
+                : "전체 상태"
+            }
+          </SelectValue>
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="all">전체 상태</SelectItem>

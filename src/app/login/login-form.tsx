@@ -33,7 +33,12 @@ export function LoginForm({
         <Label htmlFor="member">누구인가요?</Label>
         <Select value={memberId} onValueChange={(v) => setMemberId(v ?? "")}>
           <SelectTrigger id="member" className="w-full">
-            <SelectValue placeholder="가족 선택" />
+            <SelectValue placeholder="가족 선택">
+              {(value: string | null) => {
+                const selected = members.find((m) => m.id === value);
+                return selected ? `${selected.avatar_emoji} ${selected.name}` : "가족 선택";
+              }}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
             {members.map((m) => (
