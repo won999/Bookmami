@@ -1,11 +1,11 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { StarRatingInput } from "@/components/star-rating";
 import { cn } from "@/lib/utils";
 import {
   FORMAT_LABEL,
@@ -148,26 +148,9 @@ export function LogForm({
       </div>
 
       <div className="flex flex-col gap-2">
-        <Label>별점</Label>
-        <div className="flex gap-1">
-          {[1, 2, 3, 4, 5].map((n) => (
-            <button
-              key={n}
-              type="button"
-              onClick={() => setRating(rating === n ? 0 : n)}
-              aria-label={`별점 ${n}점`}
-            >
-              <Star
-                className={cn(
-                  "h-8 w-8 transition-colors",
-                  n <= rating
-                    ? "fill-amber-400 text-amber-400"
-                    : "fill-transparent text-muted-foreground"
-                )}
-              />
-            </button>
-          ))}
-        </div>
+        <Label>별점 ({rating || 0}점)</Label>
+        <StarRatingInput value={rating} onChange={setRating} />
+        <p className="text-xs text-muted-foreground">별의 왼쪽/오른쪽을 눌러 0.5점 단위로 줄 수 있어요</p>
       </div>
 
       <div className="grid grid-cols-2 gap-4">

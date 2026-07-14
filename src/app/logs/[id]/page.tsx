@@ -1,14 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Star } from "lucide-react";
 import { getReadingLogById } from "@/lib/data";
 import { getSession } from "@/lib/session";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DeleteLogButton } from "./delete-button";
+import { StarRatingDisplay } from "@/components/star-rating";
 import { FORMAT_LABEL, STATUS_LABEL } from "@/lib/types";
-import { cn } from "@/lib/utils";
 
 export default async function LogDetailPage({
   params,
@@ -44,18 +43,8 @@ export default async function LogDetailPage({
         </p>
       )}
 
-      <div className="mt-2 flex items-center gap-0.5">
-        {[1, 2, 3, 4, 5].map((n) => (
-          <Star
-            key={n}
-            className={cn(
-              "h-5 w-5",
-              n <= log.rating
-                ? "fill-amber-400 text-amber-400"
-                : "fill-transparent text-muted-foreground/40"
-            )}
-          />
-        ))}
+      <div className="mt-2">
+        <StarRatingDisplay value={log.rating} className="h-5 w-5" />
       </div>
 
       {log.one_line_review && (

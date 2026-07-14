@@ -16,7 +16,8 @@ function readCommon(formData: FormData) {
   const genre = String(formData.get("genre") ?? "").trim() || null;
   const status = String(formData.get("status") ?? "want") as ReadingStatus;
   const format = String(formData.get("format") ?? "paper") as ReadingFormat;
-  const rating = Number(formData.get("rating") ?? 0);
+  const ratingRaw = Number(formData.get("rating") ?? 0);
+  const rating = Math.min(5, Math.max(0, Math.round(ratingRaw * 2) / 2));
   const startedAt = String(formData.get("startedAt") ?? "") || null;
   const finishedAt = String(formData.get("finishedAt") ?? "") || null;
   const oneLineReview = String(formData.get("oneLineReview") ?? "").trim() || null;

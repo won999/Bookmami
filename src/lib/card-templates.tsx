@@ -19,18 +19,36 @@ function paletteFor(seed: string) {
 function Stars({ rating, size = 28, color = "#F5A623" }: { rating: number; size?: number; color?: string }) {
   return (
     <div style={{ display: "flex" }}>
-      {[1, 2, 3, 4, 5].map((n) => (
-        <span
-          key={n}
-          style={{
-            fontSize: size,
-            color: n <= rating ? color : "#D9D9D9",
-            marginRight: 2,
-          }}
-        >
-          {"★"}
-        </span>
-      ))}
+      {[1, 2, 3, 4, 5].map((n) => {
+        const fill = Math.max(0, Math.min(1, rating - (n - 1)));
+        return (
+          <div
+            key={n}
+            style={{
+              display: "flex",
+              position: "relative",
+              width: size,
+              height: size,
+              marginRight: 2,
+            }}
+          >
+            <span style={{ position: "absolute", fontSize: size, color: "#D9D9D9" }}>
+              {"★"}
+            </span>
+            <div
+              style={{
+                display: "flex",
+                position: "absolute",
+                overflow: "hidden",
+                width: `${fill * 100}%`,
+                height: size,
+              }}
+            >
+              <span style={{ fontSize: size, color }}>{"★"}</span>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }

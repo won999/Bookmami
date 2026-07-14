@@ -1,9 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Star } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { StarRatingDisplay } from "@/components/star-rating";
 import { STATUS_LABEL, type ReadingLogWithMember } from "@/lib/types";
-import { cn } from "@/lib/utils";
 
 export function ReadingLogCard({ log }: { log: ReadingLogWithMember }) {
   return (
@@ -39,19 +38,7 @@ export function ReadingLogCard({ log }: { log: ReadingLogWithMember }) {
         {log.author && (
           <p className="truncate text-xs text-muted-foreground">{log.author}</p>
         )}
-        <div className="flex items-center gap-0.5">
-          {[1, 2, 3, 4, 5].map((n) => (
-            <Star
-              key={n}
-              className={cn(
-                "h-3.5 w-3.5",
-                n <= log.rating
-                  ? "fill-amber-400 text-amber-400"
-                  : "fill-transparent text-muted-foreground/40"
-              )}
-            />
-          ))}
-        </div>
+        <StarRatingDisplay value={log.rating} className="h-3.5 w-3.5" />
         {log.one_line_review && (
           <p className="truncate text-sm text-muted-foreground">
             {log.one_line_review}
