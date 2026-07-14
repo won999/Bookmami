@@ -11,7 +11,9 @@ export async function listFamilyMembers(): Promise<FamilyMember[]> {
   const admin = getSupabaseAdmin();
   const { data, error } = await admin
     .from("family_members")
-    .select("id, name, avatar_emoji, default_template, created_at")
+    .select(
+      "id, name, avatar_emoji, default_template, reading_personality, reading_personality_updated_at, created_at"
+    )
     .order("created_at", { ascending: true });
   if (error) throw error;
   return data as unknown as FamilyMember[];
@@ -32,7 +34,9 @@ export async function getFamilyMemberById(id: string): Promise<FamilyMember | nu
   const admin = getSupabaseAdmin();
   const { data, error } = await admin
     .from("family_members")
-    .select("id, name, avatar_emoji, default_template, created_at")
+    .select(
+      "id, name, avatar_emoji, default_template, reading_personality, reading_personality_updated_at, created_at"
+    )
     .eq("id", id)
     .maybeSingle();
   if (error) throw error;
@@ -67,6 +71,16 @@ export async function getReadingLogById(id: string): Promise<ReadingLogWithMembe
     .maybeSingle();
   if (error) throw error;
   return data as unknown as ReadingLogWithMember | null;
+}
+
+export async function countReadingLogsByMember(memberId: string): Promise<number> {
+  const admin = getSupabaseAdmin();
+  const { count, error } = await admin
+    .from("reading_logs")
+    .select("id", { count: "exact", head: true })
+    .eq("member_id", memberId);
+  if (error) throw error;
+  return count ?? 0;
 }
 
 export async function getReadingLogRaw(id: string): Promise<ReadingLog | null> {

@@ -8,6 +8,8 @@ export type Database = {
           password_hash: string;
           avatar_emoji: string;
           default_template: "cover-rating" | "minimal-quote" | "polaroid-photo";
+          reading_personality: string | null;
+          reading_personality_updated_at: string | null;
           created_at: string;
         };
         Insert: {
@@ -16,6 +18,8 @@ export type Database = {
           password_hash: string;
           avatar_emoji?: string;
           default_template?: "cover-rating" | "minimal-quote" | "polaroid-photo";
+          reading_personality?: string | null;
+          reading_personality_updated_at?: string | null;
           created_at?: string;
         };
         Update: Partial<Database["public"]["Tables"]["family_members"]["Insert"]>;

@@ -20,6 +20,8 @@ export const TEMPLATE_LABEL: Record<CardTemplate, string> = {
   "polaroid-photo": "폴라로이드 사진",
 };
 
+export const MIN_LOGS_FOR_INSIGHT = 3;
+
 export const GENRES = [
   "소설",
   "에세이",
@@ -40,6 +42,8 @@ export type FamilyMember = {
   name: string;
   avatar_emoji: string;
   default_template: CardTemplate;
+  reading_personality: string | null;
+  reading_personality_updated_at: string | null;
   created_at: string;
 };
 

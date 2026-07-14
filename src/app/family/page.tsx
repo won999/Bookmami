@@ -1,11 +1,16 @@
-import { listFamilyMembers } from "@/lib/data";
+import { listFamilyMembers, countReadingLogsByMember } from "@/lib/data";
 import { getSession } from "@/lib/session";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AddMemberForm } from "./add-member-form";
 import { TemplatePicker } from "./template-picker";
+import { PersonalityInsight } from "./personality-insight";
+import { MIN_LOGS_FOR_INSIGHT } from "@/lib/types";
 
 export default async function FamilyPage() {
   const [members, session] = await Promise.all([listFamilyMembers(), getSession()]);
+  const logCounts = await Promise.all(
+    members.map((m) => countReadingLogsByMember(m.id))
+  );
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-8">
@@ -15,16 +20,25 @@ export default async function FamilyPage() {
       </p>
 
       <div className="mb-8 flex flex-col gap-3">
-        {members.map((m) => (
+        {members.map((m, i) => (
           <Card key={m.id}>
-            <CardContent className="flex items-center justify-between py-4">
-              <div className="flex items-center gap-3">
-                <span className="text-2xl">{m.avatar_emoji}</span>
-                <span className="font-medium">{m.name}</span>
+            <CardContent className="flex flex-col gap-3 py-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">{m.avatar_emoji}</span>
+                  <span className="font-medium">{m.name}</span>
+                </div>
+                {session?.memberId === m.id && (
+                  <TemplatePicker current={m.default_template} />
+                )}
               </div>
-              {session?.memberId === m.id && (
-                <TemplatePicker current={m.default_template} />
-              )}
+              <PersonalityInsight
+                memberId={m.id}
+                logCount={logCounts[i]}
+                minLogs={MIN_LOGS_FOR_INSIGHT}
+                personality={m.reading_personality}
+                updatedAt={m.reading_personality_updated_at}
+              />
             </CardContent>
           </Card>
         ))}

@@ -55,7 +55,7 @@ export function LogForm({
       <div className="grid grid-cols-2 gap-4">
         <div className="flex flex-col gap-2">
           <Label htmlFor="cover">책 표지 사진</Label>
-          <Input id="cover" name="cover" type="file" accept="image/*" capture="environment" />
+          <Input id="cover" name="cover" type="file" accept="image/*" />
           {initial?.cover_url && (
             <p className="text-xs text-muted-foreground">
               기존 사진이 있어요. 새로 올리면 교체돼요.
@@ -64,7 +64,7 @@ export function LogForm({
         </div>
         <div className="flex flex-col gap-2">
           <Label htmlFor="photo">내 인증샷 (선택)</Label>
-          <Input id="photo" name="photo" type="file" accept="image/*" capture="environment" />
+          <Input id="photo" name="photo" type="file" accept="image/*" />
         </div>
       </div>
 
